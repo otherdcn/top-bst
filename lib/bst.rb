@@ -26,5 +26,26 @@ class Tree
   def clean(array)
     array.sort.uniq
   end
+
+  def empty?
+    root_node.nil?
+  end
+
+  def insert(data, test_node = root_node)
+    if empty?
+      self.root_node = Node.new(data)
+      return root_node
+    elsif test_node.nil?
+      return Node.new(data)
+    elsif data == test_node.data
+      return nil
+    elsif data < test_node.data
+      test_node.left_child = insert(data, test_node.left_child)
+    elsif data > test_node.data
+      test_node.right_child = insert(data, test_node.right_child)
+    end
+
+    return test_node
+  end
 end
 
