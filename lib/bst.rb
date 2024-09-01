@@ -132,6 +132,58 @@ class Tree
     level_order_array unless block_given?
   end
 
+  def pre_order(node = root_node, pre_order_array = [] ,&block)
+    return nil if empty?
+
+    return if node.nil?
+
+    if block_given?
+      block.call(node)
+    else
+      pre_order_array.push(node)
+    end
+
+    pre_order(node.left_child, pre_order_array, &block)
+    pre_order(node.right_child, pre_order_array, &block)
+
+    pre_order_array unless block_given?
+  end
+
+  def in_order(node = root_node, in_order_array = [], &block)
+    return nil if empty?
+
+    return if node.nil?
+
+    in_order(node.left_child, in_order_array, &block)
+
+    if block_given?
+      block.call(node)
+    else
+      in_order_array.push(node)
+    end
+
+    in_order(node.right_child, in_order_array, &block)
+
+    in_order_array unless block_given?
+  end
+
+  def post_order(node = root_node, post_order_array = [], &block)
+    return nil if empty?
+
+    return if node.nil?
+
+    post_order(node.left_child, post_order_array, &block)
+    post_order(node.right_child, post_order_array, &block)
+
+    if block_given?
+      block.call(node)
+    else
+      post_order_array.push(node)
+    end
+
+    post_order_array unless block_given?
+  end
+
   def pretty_print(node = root_node, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
