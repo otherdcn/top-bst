@@ -1,4 +1,5 @@
 require_relative 'node'
+require_relative 'queue'
 
 class Tree
   attr_accessor :root_node
@@ -101,6 +102,34 @@ class Tree
     end
 
     node
+  end
+
+  def traverse(algorithm = :level_order, &block)
+    self.send(algorithm, &block)
+  end
+
+  def level_order(&block)
+    return nil if empty?
+
+    queue = Queue.new
+    queue.enqueue(root_node)
+    current_node = nil
+    level_order_array = []
+
+    until queue.empty?
+      current_node = queue.dequeue
+
+      if block_given?
+        block.call(current_node)
+      else
+        level_order_array.push current_node
+      end
+
+      queue.enqueue(current_node.left_child) unless current_node.left_child.nil?
+      queue.enqueue(current_node.right_child) unless current_node.right_child.nil?
+    end
+
+    level_order_array unless block_given?
   end
 
   def pretty_print(node = root_node, prefix = '', is_left = true)
