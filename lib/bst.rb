@@ -236,6 +236,15 @@ class Tree
     return @height_differences.all? { |ele| ele < 2 }
   end
 
+  def rebalance
+    in_order_array = []
+    traverse(:in_order) do |node|
+      in_order_array << node.data
+    end
+
+    self.root_node = build_tree(in_order_array, 0, in_order_array.size - 1)
+  end
+
   def pretty_print(node = root_node, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
