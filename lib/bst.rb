@@ -219,12 +219,21 @@ class Tree
     right_height = find_height_helper(node, test_node.right_child)
 
     test_node_height = [left_height, right_height].max + 1
+    @height_differences << (left_height.abs - right_height.abs).abs
 
     if node == test_node
       @node_height = test_node_height
     end
 
     test_node_height
+  end
+
+  def balanced?
+    @height_differences = []
+
+    find_height_helper(nil, root_node)
+
+    return @height_differences.all? { |ele| ele < 2 }
   end
 
   def pretty_print(node = root_node, prefix = '', is_left = true)
