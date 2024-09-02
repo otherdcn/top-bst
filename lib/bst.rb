@@ -204,6 +204,29 @@ class Tree
     distance
   end
 
+  def height(node, test_node = root_node)
+    find_height_helper(node, test_node)
+
+    return @node_height
+  end
+
+  def find_height_helper(node, test_node)
+    if empty? || test_node.nil?
+      return -1
+    end
+
+    left_height = find_height_helper(node, test_node.left_child)
+    right_height = find_height_helper(node, test_node.right_child)
+
+    test_node_height = [left_height, right_height].max + 1
+
+    if node == test_node
+      @node_height = test_node_height
+    end
+
+    test_node_height
+  end
+
   def pretty_print(node = root_node, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
