@@ -184,6 +184,26 @@ class Tree
     post_order_array unless block_given?
   end
 
+  def depth(node, test_node = root_node)
+    distance = -1
+
+    if empty?
+      return -1
+    elsif test_node.nil?
+      return -1
+    elsif node == test_node
+      return distance + 1
+    elsif node < test_node
+      distance = depth(node, test_node.left_child)
+      distance += 1 if distance >= 0
+    elsif node > test_node
+      distance = depth(node, test_node.right_child)
+      distance += 1 if distance >= 0
+    end
+
+    distance
+  end
+
   def pretty_print(node = root_node, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
