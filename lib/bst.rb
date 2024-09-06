@@ -8,6 +8,7 @@ class Tree
     clean_array = clean(messy_array)
 
     self.root_node = build_tree(clean_array, 0, clean_array.size - 1)
+    @height_differences = []
   end
 
   def build_tree(array, start_index, end_index)
@@ -130,6 +131,32 @@ class Tree
     end
 
     level_order_array unless block_given?
+  end
+
+  def level_order_recursion(&block)
+    tree_height = height(root_node)
+    level_order_array = []
+
+    for i in 0..tree_height do
+      access_level(root_node, i, level_order_array, &block)
+    end
+
+    level_order_array unless block_given?
+  end
+
+  def access_level(node, tree_level, level_order_array, &block)
+    if node.nil?
+      return
+    elsif tree_level == 0
+      if block_given?
+        block.call(node)
+      else
+        level_order_array.push node
+      end
+    else
+      access_level(node.left_child, tree_level - 1, level_order_array, &block)
+      access_level(node.right_child, tree_level - 1, level_order_array, &block)
+    end
   end
 
   def pre_order(node = root_node, pre_order_array = [] ,&block)
