@@ -1,4 +1,4 @@
-require_relative 'lib/bst'
+require_relative "lib/bst"
 array = (Array.new(15) { rand(1..100) })
 
 puts "Create Balanced Binary Search Tree with: #{array}"
@@ -15,7 +15,7 @@ puts "Is tree balanced: #{tree.balanced?}"
 
 puts "---------------------------------------------------------------"
 
-traversal_algorithms = [:level_order, :pre_order, :in_order, :post_order]
+traversal_algorithms = %i[level_order pre_order in_order post_order]
 
 traversal_algorithms.each do |algorithm|
   print "#{algorithm} traversal: ".ljust(25)
@@ -53,11 +53,10 @@ puts "Is tree balanced: #{tree.balanced?}"
 
 puts "---------------------------------------------------------------"
 
-traversal_algorithms = [:level_order, :pre_order, :in_order, :post_order]
+traversal_algorithms = %i[level_order pre_order in_order post_order]
 
 traversal_algorithms.each do |algorithm|
   print "#{algorithm} traversal: ".ljust(25)
   tree.traverse(algorithm) { |node| print "#{node.data} " }
   puts ""
 end
-

@@ -1,5 +1,5 @@
-require_relative 'node'
-require_relative 'queue'
+require_relative "node"
+require_relative "queue"
 
 class Tree
   attr_accessor :root_node
@@ -12,15 +12,13 @@ class Tree
   end
 
   def build_tree(array, start_index, end_index)
-    if start_index > end_index
-      return nil
-    else
-      middle_index = (start_index + end_index) / 2
-      root_node = Node.new(array[middle_index])
+    return nil if start_index > end_index
 
-      root_node.left_child = build_tree(array, start_index, middle_index - 1)
-      root_node.right_child = build_tree(array, middle_index + 1, end_index)
-    end
+    middle_index = (start_index + end_index) / 2
+    root_node = Node.new(array[middle_index])
+
+    root_node.left_child = build_tree(array, start_index, middle_index - 1)
+    root_node.right_child = build_tree(array, middle_index + 1, end_index)
 
     root_node
   end
@@ -47,14 +45,12 @@ class Tree
       test_node.right_child = insert(data, test_node.right_child)
     end
 
-    return test_node
+    test_node
   end
 
   def replace_with_successor(curr)
     curr = curr.right_child
-    while !(curr.nil?) && !(curr.left_child.nil?)
-      curr = curr.left_child
-    end
+    curr = curr.left_child while !curr.nil? && !curr.left_child.nil?
 
     curr
   end
@@ -71,7 +67,7 @@ class Tree
     elsif node == test_node.data
       if test_node.left_child.nil? && test_node.right_child.nil?
         return nil
-      elsif !(test_node.left_child.nil?) && !(test_node.right_child.nil?)
+      elsif !test_node.left_child.nil? && !test_node.right_child.nil?
         successor = replace_with_successor(test_node)
         test_node.data = successor.data
         test_node.right_child = delete(successor.data, test_node.right_child)
@@ -106,7 +102,7 @@ class Tree
   end
 
   def traverse(algorithm = :level_order, &block)
-    self.send(algorithm, &block)
+    send(algorithm, &block)
   end
 
   def level_order(&block)
@@ -137,7 +133,7 @@ class Tree
     tree_height = height(root_node)
     level_order_array = []
 
-    for i in 0..tree_height do
+    (0..tree_height).each do |i|
       access_level(root_node, i, level_order_array, &block)
     end
 
@@ -146,8 +142,8 @@ class Tree
 
   def access_level(node, tree_level, level_order_array, &block)
     if node.nil?
-      return
-    elsif tree_level == 0
+      nil
+    elsif tree_level.zero?
       if block_given?
         block.call(node)
       else
@@ -159,7 +155,7 @@ class Tree
     end
   end
 
-  def pre_order(node = root_node, pre_order_array = [] ,&block)
+  def pre_order(node = root_node, pre_order_array = [], &block)
     return nil if empty?
 
     return if node.nil?
@@ -234,13 +230,11 @@ class Tree
   def height(node, test_node = root_node)
     find_height_helper(node, test_node)
 
-    return @node_height
+    @node_height
   end
 
   def find_height_helper(node, test_node)
-    if empty? || test_node.nil?
-      return -1
-    end
+    return -1 if empty? || test_node.nil?
 
     left_height = find_height_helper(node, test_node.left_child)
     right_height = find_height_helper(node, test_node.right_child)
@@ -248,9 +242,7 @@ class Tree
     test_node_height = [left_height, right_height].max + 1
     @height_differences << (left_height.abs - right_height.abs).abs
 
-    if node == test_node
-      @node_height = test_node_height
-    end
+    @node_height = test_node_height if node == test_node
 
     test_node_height
   end
@@ -260,7 +252,7 @@ class Tree
 
     find_height_helper(nil, root_node)
 
-    return @height_differences.all? { |ele| ele < 2 }
+    @height_differences.all? { |ele| ele < 2 }
   end
 
   def rebalance
@@ -272,10 +264,9 @@ class Tree
     self.root_node = build_tree(in_order_array, 0, in_order_array.size - 1)
   end
 
-  def pretty_print(node = root_node, prefix = '', is_left = true)
+  def pretty_print(node = root_node, prefix = "", is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
     pretty_print(node.left_child, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left_child
   end
 end
-
